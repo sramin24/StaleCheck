@@ -1,0 +1,51 @@
+[project]
+name = "stalecheck"
+version = "0.1.0"
+description = "Commit-time stale-read validation for parallel AI-agent work"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "mcp>=1.0,<2",
+    "tree-sitter>=0.23",
+    "tree-sitter-python>=0.23",
+    "typer>=0.12",
+]
+
+[project.scripts]
+stalecheck = "stalecheck.cli:app"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.100",
+    "mypy>=1.10",
+    "pytest>=8",
+    "ruff>=0.5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/stalecheck"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["tree_sitter_python"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
